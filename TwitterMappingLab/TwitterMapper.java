@@ -43,6 +43,8 @@ public class TwitterMapper
     public static void main ( String[] args ) throws TwitterException, IOException
     {
         TwitterMapper twitterMapper = new TwitterMapper( "coding" );
+        twitterMapper.findTweetsForAllStates();
+        twitterMapper.mapSentimentForAllStates();
     }
     
     
@@ -87,7 +89,28 @@ public class TwitterMapper
      */
     public void findTweetsForState( State state) throws TwitterException
     {
-        
+        Twitter newTwit= TwitterFactory.getSingleton();
+        Query newQuery= new Query(this.keyword).geoCode(new GeoLocation(state.getCenter().getLatitude(), state.getCenter().getLongitude()),state.getRadius(), "mi");
+        newQuery.count(MAX_TWEETS_PER_STATE);
+        QueryResult result= newTwit.search(newQuery);
+        double total= 0;
+        double avg;
+        double counter=0;
+        for (Status status: result.getTweets())
+        {
+            Tweet newTweet= new Tweet(status.getUser().getName(), status.getText(), status.getCreatedAt(), status.getGeoLocation());
+            total+= newTweet.getSentiment();
+            counter++;
+        }
+        if (counter>0||counter<0)
+        {
+            avg= total/counter;
+            state.setSentiment();
+        }
+        else
+        {
+            state.setSentiment();
+        }
     }
     
     /**

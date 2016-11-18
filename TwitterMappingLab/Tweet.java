@@ -1,5 +1,6 @@
 import twitter4j.*;
 import java.util.Date;
+import java.util.Scanner;
 /**
  * Write a description of class Tweet here.
  * 
@@ -14,25 +15,48 @@ public class Tweet
     private double sentiment;
     private Date date;
     private twitter4j.GeoLocation location;
-    public Tweet(String user, String text,Date date, twitter.GeoLocation location)
+    public Tweet(String user, String text,Date date, twitter4j.GeoLocation location)
     {
-        
+        user= this.user;
+        text= this.text;
+        date=this.date;
+        location=this.location;
+        this.calculateSentiment();
     }
-    /**
-     * An example of a method - replace this comment with your own
-     *    that describes the operation of the method
-     *
-     * @pre        preconditions for the method
-     *            (what the method assumes about the method's parameters and class's state)
-     * @post    postconditions for the method
-     *            (what the method guarantees upon completion)
-     * @param    y    description of parameter y
-     * @return    description of the return value
-     */
-    public int sampleMethod(int y)
+    public String getUser()
     {
-        // put your code here
-        return x+y;
+        return user;
     }
-   
+    public String getText()
+    {
+        return text;
+    }
+    public Date getDate()
+    {
+        return date;
+    }
+    public twitter4j.GeoLocation getLocation()
+    {
+        return location;
+    }
+    public double getSentiment()
+    {
+        return sentiment;
+    }
+    public static double calculateSentiment()
+    {
+        Scanner scan= new Scanner(System.in);
+        SentimentDictionary dict= SentimentDictionary.getSingleton();
+        String newString;
+        double sentiment= 0.0;
+        int counter=0;
+        while(scan.hasNext()==true)
+        {
+            newString= scan.next();
+            sentiment+= dict.getSentiment(newString);
+            counter++;
+       }
+        sentiment= sentiment/counter;
+        return sentiment;
+    }
 }
