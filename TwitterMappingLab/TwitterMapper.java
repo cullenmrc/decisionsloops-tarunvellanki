@@ -32,7 +32,7 @@ public class TwitterMapper
     
     private static String HTML_TEMPLATE_FILENAME = "mapTemplate.html";
     private static String STATE_DATA_FILENAME = "states.csv";
-    private static int MAX_TWEETS_PER_STATE = 100;
+    private static int MAX_TWEETS_PER_STATE = 1;
 
     
     /**
@@ -90,27 +90,28 @@ public class TwitterMapper
     public void findTweetsForState( State state) throws TwitterException
     {
         Twitter newTwit= TwitterFactory.getSingleton();
-        Query newQuery= new Query(this.keyword).geoCode(new GeoLocation(state.getCenter().getLatitude(), state.getCenter().getLongitude()),state.getRadius(), "mi");
-        newQuery.count(MAX_TWEETS_PER_STATE);
-        QueryResult result= newTwit.search(newQuery);
+        Query query = new Query(this.keyword).geoCode(new GeoLocation(state.getCenter().getLatitude(), state.getCenter().getLongitude()), state.getRadius(), "mi");
+        query.count(MAX_TWEETS_PER_STATE);
+        QueryResult result= newTwit.search(query);
         double total= 0;
         double avg;
         double counter=0;
         for (Status status: result.getTweets())
         {
-            Tweet newTweet= new Tweet(status.getUser().getName(), status.getText(), status.getCreatedAt(), status.getGeoLocation());
+            Tweet newTweet= new Tweet(status.getUser().getName(), status.getText(),status.getCreatedAt(), status.getGeoLocation());
             total+= newTweet.getSentiment();
             counter++;
         }
         if (counter>0||counter<0)
         {
             avg= total/counter;
-            state.setSentiment();
         }
         else
         {
-            state.setSentiment();
+            avg=0;
         }
+        state.setSentiment(avg);
+        System.out.println("State:"+avg);
     }
     
     /**

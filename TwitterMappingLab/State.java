@@ -12,9 +12,9 @@ public class State
     public State(String abbreviation, twitter4j.GeoLocation center, double area)
     {
         // initialise instance variables
-        abbreviation=this.abbreviation;
-        center= this.center;
-        area= this.area;
+        this.abbreviation=abbreviation;
+        this.center= center;
+        this.area= area;
     }
 
     /**
@@ -48,10 +48,10 @@ public class State
         // put your code here
         return this.sentiment;
     }
-    public void setSentiment()
+    public void setSentiment(double sentiment)
     {
         // put your code here
-        sentiment=this.sentiment;
+        this.sentiment=sentiment;
     }
     public double getRadius()
     {
@@ -68,4 +68,5 @@ public class State
         "Radius= "+ this.getRadius()+ "\n");
         return megaString;
     }
+    
 }

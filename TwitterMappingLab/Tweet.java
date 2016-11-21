@@ -17,11 +17,11 @@ public class Tweet
     private twitter4j.GeoLocation location;
     public Tweet(String user, String text,Date date, twitter4j.GeoLocation location)
     {
-        user= this.user;
-        text= this.text;
-        date=this.date;
-        location=this.location;
-        this.calculateSentiment();
+        this.user= user;
+        this.text= text;
+        this.date=date;
+        this.location=location;
+        this.calculateSentiment(this.text);
     }
     public String getUser()
     {
@@ -43,7 +43,7 @@ public class Tweet
     {
         return sentiment;
     }
-    public static double calculateSentiment()
+    public static double calculateSentiment(String text)
     {
         Scanner scan= new Scanner(System.in);
         SentimentDictionary dict= SentimentDictionary.getSingleton();
@@ -53,10 +53,13 @@ public class Tweet
         while(scan.hasNext()==true)
         {
             newString= scan.next();
+            if ((dict.getSentiment(newString)!= null)){
             sentiment+= dict.getSentiment(newString);
             counter++;
+        }
        }
-        sentiment= sentiment/counter;
-        return sentiment;
+       sentiment= sentiment/counter;
+       return sentiment;
+        }
     }
-}
+
